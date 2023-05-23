@@ -1,0 +1,244 @@
+import { mount as mountDevTools } from "@latticexyz/dev-tools";
+import { setup } from "./mud/setup";
+
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DragControls } from 'three/addons/controls/DragControls.js';
+import { Sky } from 'three/addons/objects/Sky.js';
+
+//const controls = new OrbitControls( camera, renderer.domElement );
+//const loader = new GLTFLoader();
+
+const loader = new GLTFLoader();
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+  
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize( window.innerWidth, window.innerHeight );
+document.body.appendChild( renderer.domElement );
+
+
+function modelLoader(url) {
+  return new Promise((resolve, reject) => {
+    loader.load(url, data=> resolve(data), null, reject);
+  });
+}
+
+
+
+async function threejs() {
+
+  //sky
+
+  
+
+
+const helper = new THREE.GridHelper( 200, 200, 0xffffff, 0xffffff );
+        scene.add( helper )
+
+
+        const controls = new OrbitControls( camera, renderer.domElement );
+        controls.addEventListener( 'change', render );
+        //controls.maxPolarAngle = Math.PI / 2;
+        controls.enableZoom = true;
+        controls.enablePan = false;
+
+
+  const gltfData = await modelLoader('/assets/icegrean.glb');
+  let object;
+  let capmesh;
+  let model = gltfData.scene;
+  model.traverse((node) => {
+    if (!node.isMesh) return;
+      console.log("mmmmmmm",node);
+        //onemodel so ok
+      node.material.wireframe = true;
+      //node.material.emissive = {isColor: true, r: 200, g: 0, b: 0};
+      //node.material.set("MeshPhongMaterial");
+      capmesh=node;
+      console.log("mmmmmmm",capmesh);
+      return;
+  });
+  scene.add(capmesh );
+   
+  
+  const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+  const material = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
+  const cube = new THREE.Mesh( geometry, material );
+  //cube.material.emissive.r=0x44;
+  capmesh.position.z=1;
+  cube.position.z=1
+  scene.add( cube );
+  let ambientLight = new THREE.AmbientLight(new THREE.Color('hsl(0, 0%, 100%)'), 0.75);
+  scene.add(ambientLight);
+  
+  /*
+  
+  async function loadGlb(){
+    let objInstance = await loader.load('/assets/icegrean.glb',function(gltf) {
+    object = gltf.scene;
+    object.traverse((node) => {
+      if (!node.isMesh) return;
+        console.log("mmmmmmm",node);
+        capmesh=node;
+        node.material.wireframe = true;
+        return;
+    });
+    scene.add(object);
+    console.log('tttttt',object);
+  
+    });
+    
+  }*/
+
+  
+  
+  
+  const bv = new THREE.Vector3( );
+  //camera.lookAt(0,-10,-2);
+   //camera.getWorldDirection(bv) ;
+  //console.log("Camera angle ",bv);
+  
+  const geoplane = new THREE.PlaneGeometry( 10000, 10000 );
+  const matplane = new THREE.MeshPhongMaterial({
+    color: 0x332266,    // red (can also use a CSS color string here)
+    flatShading: true,
+  }); //new THREE.MeshBasicMaterial( {color: 0x221133, side: THREE.DoubleSide} );
+  const plane = new THREE.Mesh( geoplane, matplane );
+  
+  //scene.add( plane ); 
+  
+
+
+
+
+  
+  let arr=[];
+  arr.push(plane);
+  arr.push(capmesh);
+  arr.push(cube);
+  //const controls = new DragControls( arr, camera, renderer.domElement );
+  
+  // add event listener to highlight dragged objects
+/*
+  controls.addEventListener( 'dragstart', function ( event ) {
+  
+    event.object.material.emissive.r=0xFF;
+  
+  } );
+  
+  controls.addEventListener( 'dragend', function ( event ) {
+  
+    event.object.material.emissive.r=0x00;
+  
+  } );
+*/
+  //const contOrbit = new OrbitControls( camera, renderer.domElement );
+  //camera.position.y = 5;
+  camera.position.x = 0;
+  camera.position.y = 12;
+  camera.position.z = 8;
+  let a=2;
+  let b=-1;
+  let c=10;
+  let d=Math.sqrt((a*a)+(b*b)+(c*c));
+  camera.up.set(0,0,1);
+  camera.lookAt(0,0,0);
+  //contOrbit.update();
+  
+  
+  iniCiel();
+  animate();
+}
+
+threejs().catch(error => {
+  console.error(error);
+});
+
+  function iniCiel(){
+    let sky = new Sky();
+  sky.scale.setScalar( 450000 );
+  scene.add( sky );
+
+  const effectController = {
+          turbidity: 20,
+          rayleigh: 1.886,
+          mieCoefficient: 0.042,
+          mieDirectionalG: 0.889,
+          exposure: 0.2871
+        };
+
+  const uniforms = sky.material.uniforms;
+          uniforms[ 'turbidity' ].value = 20;
+          uniforms[ 'rayleigh' ].value = 1.886;
+          uniforms[ 'mieCoefficient' ].value = 0.042;
+          uniforms[ 'mieDirectionalG' ].value = 0.889;
+          const phi = THREE.MathUtils.degToRad( 90 - 0 );
+          const theta = THREE.MathUtils.degToRad( 180 );
+
+          sun.setFromSphericalCoords( 1, phi, theta );
+          uniforms[ 'sunPosition' ].value.copy( sun );
+          renderer.toneMappingExposure = 0.2871;
+
+  render();
+  }
+
+function render() {
+
+        renderer.render( scene, camera );
+
+      }
+
+function animate() {
+  
+    requestAnimationFrame( animate );
+    //contOrbit.update();
+  
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+    //camera.getWorldDirection(bv) ;
+  //console.log("Camera angle ",bv);
+    render();
+  }
+
+
+const {
+  components,
+  systemCalls: { increment, callGen,partici,ready, startRace},
+} = await setup();
+
+// Components expose a stream that triggers when the component is updated.
+components.Counter.update$.subscribe((update) => {
+  const [nextValue, prevValue] = update.value;
+  console.log("Counter updated", update, { nextValue, prevValue });
+  document.getElementById("counter")!.innerHTML = String(nextValue?.value ?? "unset");
+});
+
+
+components.GridBolid.update$.subscribe((update) => {
+  console.log("AAAAAAAAAAAAAAAAAAAé",update);
+});
+// Just for demonstration purposes: we create a global function that can be
+// called to invoke the Increment system contract via the world. (See IncrementSystem.sol.)
+(window as any).increment = async () => {
+  console.log("new counter value:", await increment());
+};
+
+(window as any).appel = async () => {
+  console.log("new counter value:", await callGen());
+};
+
+(window as any).part = async () => {
+  console.log("new counter value:", await partici());
+};
+
+(window as any).placeonrace = async () => {
+  console.log("new counter value:", await ready());
+};
+
+(window as any).startpos = async () => {
+  console.log("new counter value:", await startRace());
+};
+
+mountDevTools();

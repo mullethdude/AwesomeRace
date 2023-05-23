@@ -1,0 +1,99 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v1.7.33",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Icosphere",
+            "rotation" : [
+                0,
+                0.7071068286895752,
+                0,
+                0.7071068286895752
+            ]
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "name" : "Material.001",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0,
+                    0.4969199299812317,
+                    0.0159163735806942,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Icosphere.001",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0
+                    },
+                    "indices" : 1,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 12,
+            "max" : [
+                0.8944249749183655,
+                0.8506399989128113,
+                3.899998426437378
+            ],
+            "min" : [
+                -0.8944249749183655,
+                -0.8506399989128113,
+                -1
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5123,
+            "count" : 60,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 144,
+            "byteOffset" : 0
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 120,
+            "byteOffset" : 144
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 264,
+            "uri" : "data:application/octet-stream;base64,AAAAAAAAAAAAAIC/2T05P5aVBr9d+eS+VoKNvovDWb9d+eS+CflkvwAAAABd+eS+VoKNvovDWT9d+eS+2T05P5aVBj9d+eS+VoKNPovDWb9d+eQ+2T05v5aVBr9d+eQ+2T05v5aVBj9d+eQ+VoKNPovDWT9d+eQ+CflkPwAAAABd+eQ+AAAAAAAAAACTmXlAAAABAAIAAQAAAAUAAAACAAMAAAADAAQAAAAEAAUAAQAFAAoAAgABAAYAAwACAAcABAADAAgABQAEAAkAAQAKAAYAAgAGAAcAAwAHAAgABAAIAAkABQAJAAoABgAKAAsABwAGAAsACAAHAAsACQAIAAsACgAJAAsA"
+        }
+    ]
+}
